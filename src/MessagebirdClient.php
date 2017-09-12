@@ -37,12 +37,19 @@ class MessagebirdClient
         }
 
         try {
-            $this->client->request('POST', 'https://rest.messagebird.com/messages', [
+            $response =  $this->client->request('POST', 'https://rest.messagebird.com/messages', [
                 'body' => $message->toJson(),
                 'headers' => [
                     'Authorization' => 'AccessKey '.$this->access_key,
                 ],
+                'http_errors' => false,
             ]);
+
+            if ($response_processor_class = config('services.messagebird.response_processor_class')) {
+                $r = new \ReflectionClass($response_processor_class);
+                $response_processor = $r->newInstanceArgs([$message, $response]);
+                $response_processor->run();
+            }
         } catch (Exception $exception) {
             throw CouldNotSendNotification::serviceRespondedWithAnError($exception);
         }

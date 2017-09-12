@@ -2,11 +2,15 @@
 
 namespace NotificationChannels\Messagebird;
 
+use Illuminate\Database\Eloquent\Model;
+
 class MessagebirdMessage
 {
     public $body;
     public $originator;
     public $recipients;
+    public $reference;
+    public $smsable;
 
     public static function create($body = '')
     {
@@ -41,6 +45,20 @@ class MessagebirdMessage
         }
 
         $this->recipients = $recipients;
+
+        return $this;
+    }
+
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function setSmsable(Model $smsable)
+    {
+        $this->smsable = $smsable;
 
         return $this;
     }
