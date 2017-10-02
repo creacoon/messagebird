@@ -58,7 +58,12 @@ class MessagebirdMessage
 
     public function setSmsable(Model $smsable)
     {
-        $this->smsable = $smsable;
+        // Strip non-relevant info so we don't post this to Messagebird
+        $r = new \ReflectionClass(get_class($smsable));
+        $stripped_smsable = $r->newInstanceArgs();
+        $stripped_smsable->id = $smsable->id;
+
+        $this->smsable = $stripped_smsable;
 
         return $this;
     }
