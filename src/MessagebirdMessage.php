@@ -19,7 +19,7 @@ class MessagebirdMessage
 
     public function __construct($body = '')
     {
-        if (! empty($body)) {
+        if (!empty($body)) {
             $this->body = trim($body);
         }
     }
